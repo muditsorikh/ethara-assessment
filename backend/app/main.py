@@ -45,13 +45,8 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        settings.frontend_url,
-        "http://localhost:3000",
-        "http://localhost:5173",
-        "https://*.vercel.app",
-        "https://*.netlify.app"
-    ],
+    allow_origins=[],
+    allow_origin_regex=r"(https://.\.vercel\.app|https://.\.onrender\.com|http://localhost:\d+)",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
