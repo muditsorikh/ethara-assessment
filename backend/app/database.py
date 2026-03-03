@@ -5,7 +5,6 @@ from motor.motor_asyncio import AsyncIOMotorClient
 from typing import Optional
 from app.config import settings
 
-# Global database client
 client: Optional[AsyncIOMotorClient] = None
 database = None
 
@@ -18,7 +17,6 @@ async def connect_to_mongodb():
     client = AsyncIOMotorClient(settings.mongodb_url)
     database = client[settings.database_name]
     
-    # Create indexes for better query performance
     await database.employees.create_index("employee_id", unique=True)
     await database.employees.create_index("email", unique=True)
     await database.attendance.create_index([("employee_id", 1), ("date", 1)], unique=True)

@@ -44,7 +44,6 @@ async def get_attendance_records(
     """Get attendance records with optional filters."""
     db = get_database()
     
-    # Build query filter
     query = {}
     
     if employee_id:
@@ -59,13 +58,11 @@ async def get_attendance_records(
         if date_filter:
             query["date"] = date_filter
     
-    # Get employee names for lookup
     employees = {}
     cursor = db.employees.find()
     async for emp in cursor:
         employees[emp["employee_id"]] = emp["full_name"]
     
-    # Get attendance records
     records = []
     cursor = db.attendance.find(query).sort("date", -1)
     async for record in cursor:
@@ -90,7 +87,6 @@ async def get_employee_attendance(
     """Get attendance records for a specific employee."""
     db = get_database()
     
-    # Check if employee exists
     employee = await db.employees.find_one({"employee_id": employee_id})
     if not employee:
         raise HTTPException(
@@ -98,7 +94,6 @@ async def get_employee_attendance(
             detail=f"Employee with ID '{employee_id}' not found"
         )
     
-    # Build query
     query = {"employee_id": employee_id}
     
     if start_date or end_date:
@@ -110,7 +105,6 @@ async def get_employee_attendance(
         if date_filter:
             query["date"] = date_filter
     
-    # Get records
     records = []
     cursor = db.attendance.find(query).sort("date", -1)
     async for record in cursor:
@@ -130,7 +124,6 @@ async def get_attendance_summary(employee_id: str):
     """Get attendance summary for a specific employee."""
     db = get_database()
     
-    # Check if employee exists
     employee = await db.employees.find_one({"employee_id": employee_id})
     if not employee:
         raise HTTPException(
@@ -138,7 +131,6 @@ async def get_attendance_summary(employee_id: str):
             detail=f"Employee with ID '{employee_id}' not found"
         )
     
-    # Count attendance
     total_present = await db.attendance.count_documents({
         "employee_id": employee_id,
         "status": "Present"
@@ -182,7 +174,6 @@ async def mark_attendance(attendance: AttendanceCreate):
             detail=f"Employee with ID '{attendance.employee_id}' not found"
         )
     
-    # Check if attendance already marked for this date
     attendance_date = datetime.combine(attendance.date, datetime.min.time())
     existing = await db.attendance.find_one({
         "employee_id": attendance.employee_id,
@@ -190,7 +181,6 @@ async def mark_attendance(attendance: AttendanceCreate):
     })
     
     if existing:
-        # Update existing record
         await db.attendance.update_one(
             {"_id": existing["_id"]},
             {"$set": {"status": attendance.status.value}}
@@ -198,7 +188,6 @@ async def mark_attendance(attendance: AttendanceCreate):
         existing["status"] = attendance.status.value
         return attendance_helper(existing, employee["full_name"])
     
-    # Create new attendance record
     attendance_doc = {
         "employee_id": attendance.employee_id,
         "date": attendance_date,

@@ -13,7 +13,6 @@ class AttendanceStatus(str, Enum):
     ABSENT = "Absent"
 
 
-# Employee Models
 class EmployeeCreate(BaseModel):
     """Schema for creating a new employee."""
     employee_id: str = Field(..., min_length=1, max_length=50, description="Unique employee ID")
@@ -53,7 +52,6 @@ class EmployeeListResponse(BaseModel):
     total: int
 
 
-# Attendance Models
 class AttendanceCreate(BaseModel):
     """Schema for marking attendance."""
     employee_id: str = Field(..., description="Employee ID")
@@ -88,7 +86,6 @@ class AttendanceSummary(BaseModel):
     total_days: int
 
 
-# Dashboard Models
 class DashboardSummary(BaseModel):
     """Schema for dashboard summary."""
     total_employees: int
@@ -98,7 +95,6 @@ class DashboardSummary(BaseModel):
     departments: List[dict]
 
 
-# Error Models
 class ErrorResponse(BaseModel):
     """Schema for error responses."""
     detail: str

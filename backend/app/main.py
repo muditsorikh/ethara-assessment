@@ -22,7 +22,6 @@ async def lifespan(app: FastAPI):
     await close_mongodb_connection()
 
 
-# Create FastAPI application
 app = FastAPI(
     title="HRMS Lite API",
     description="""
@@ -44,7 +43,6 @@ app = FastAPI(
     redoc_url="/redoc"
 )
 
-# Configure CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
@@ -60,7 +58,6 @@ app.add_middleware(
 )
 
 
-# Global exception handler
 @app.exception_handler(Exception)
 async def global_exception_handler(request: Request, exc: Exception):
     """Handle unexpected exceptions globally."""
@@ -73,13 +70,11 @@ async def global_exception_handler(request: Request, exc: Exception):
     )
 
 
-# Include routers
 app.include_router(employees.router, prefix="/api")
 app.include_router(attendance.router, prefix="/api")
 app.include_router(dashboard.router, prefix="/api")
 
 
-# Health check endpoint
 @app.get("/", tags=["Health"])
 async def root():
     """Root endpoint - API health check."""
