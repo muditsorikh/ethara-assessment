@@ -121,19 +121,6 @@ function Dashboard() {
         </div>
       )}
 
-      <div className="quick-actions mt-lg">
-        <h3 className="mb-md">Quick Actions</h3>
-        <div className="quick-actions-grid">
-          <a href="/employees" className="quick-action-card">
-            <Users size={24} />
-            <span>Manage Employees</span>
-          </a>
-          <a href="/attendance" className="quick-action-card">
-            <UserCheck size={24} />
-            <span>Mark Attendance</span>
-          </a>
-        </div>
-      </div>
     </div>
   );
 }
