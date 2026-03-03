@@ -45,9 +45,8 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[],
-    allow_origin_regex=r"(https://.\.vercel\.app|https://.\.onrender\.com|http://localhost:\d+)",
-    allow_credentials=True,
+    allow_origins=[*],
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
